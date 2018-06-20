@@ -37,3 +37,49 @@ and exp = IdExp of id
    in
     stmargs(stm)
   end
+
+  type table = (id * int) list
+  
+  fun interp (stm) = let
+
+    fun update (t, id, n) = (id, n) :: t
+
+      fun lookup ((l, r) :: xs, id) =
+        if l = id then r else lookup(xs, id)
+
+          fun doOp (l, Plus, r) = l + r
+            | doOp (l, Minus, r) = l - r
+            | doOp (l, Times, r) = l * r
+
+            fun interpStm (CompoundStm(l, r), t) = let
+                val t1 = interpStm(l, t)
+                val t2 = interpStm(r, t1)
+              in
+                t2
+              end
+             | interpStm (AssignStm(id, exp), t) = let
+              val (n, t1) = interpExp(exp, t)
+            in
+              update(t1, id, n)
+            end 
+            | interpStm (PrintStm(_), t) = t
+          and 
+            interpExp (IdExp(id), t) = (lookup(t, id), t)
+            | interpExp (NumExp(i), t) = (i, t)
+            | interpExp (OpExp(l, oper, r), t) = let
+              val (ln, t1) = interpExp(l, t)
+              val (rn, t2) = interpExp(r, t1)
+              val n = doOp(ln, oper, rn)
+            in
+              (n, t2)
+            end
+            | interpExp (EseqExp(stm, exp), t) = let
+              val t1 = interpStm(stm, t)
+              val (i, t2) = interpExp(exp, t1)
+            in
+              (i, t2)
+            end
+          in
+            interpStm(stm, nil)
+          end
+
