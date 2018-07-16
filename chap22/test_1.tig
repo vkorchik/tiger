@@ -1,1 +1,1 @@
-var i1: int := 5
+var i1 := 5

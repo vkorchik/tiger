@@ -5,5 +5,5 @@ errormsg.sml
 tokens.sig
 tokens.sml
 tiger.lex
+$SMLNJ-BASIS/basis.cm
 $/smlnj-lib.cm
-(*/usr/local/Cellar/smlnj/110.82/SMLNJ_HOME/smlnj-lib/Util/smlnj-lib.cm*)
