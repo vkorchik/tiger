@@ -1,1 +1,4 @@
-var i1 := 5
+/* comment bitch! */
+
+type superint = string
+var i1 superint := "olaf olaf123"
